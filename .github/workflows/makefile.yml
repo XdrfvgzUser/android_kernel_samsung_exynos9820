@@ -15,7 +15,8 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: configure
-      run: ./configure
+      run:  make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- exynos9820-beyond1lte_defconfig
+
 
     - name: Install dependencies
       run: make
