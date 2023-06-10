@@ -118,7 +118,7 @@ jobs:
 
       - name: Kernel Configure
         run: |
-         make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- O=build exynos9820-beyond1lte_defconfig
+         make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- exynos9820-beyond1lte_defconfig
       - name: Install gcc-aarch64-linux-gnu exynos9820-beyond1lte_defconfig
         if: env.TOOLCHAIN == 'system-gcc' || env.TOOLCHAIN == 'system-clang'
         env:
@@ -133,4 +133,21 @@ jobs:
 
        - name: Kernel Build
         run: make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- O=build
- 
+ - name: Install gcc-aarch64-linux-gnu
+        if: env.TOOLCHAIN == 'system-gcc' || env.TOOLCHAIN == 'system-clang'
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: sudo apt-get install -y -qq gcc-aarch64-linux-gnu
+      - name: Install clang
+        if: env.TOOLCHAIN == 'system-clang'
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: sudo apt-get install -y -qq llvm lld clang
+      - name: Deploy Toolchain
+        if: env.TOOLCHAIN != 'system-gcc' && env.TOOLCHAIN != 'system-clang'
+        run: git clone --depth 1 -j $(nproc) --branch $TOOLCHAIN --single-branch https://github.com/CruelKernel/samsung-exynos9820-toolchain toolchain
+
+      - name: Kernel Build
+        run:  |
+         make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- exynos9820-beyond1lte_defconfig
+
