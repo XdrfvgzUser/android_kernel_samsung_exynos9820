@@ -1,29 +1,44 @@
-name: Makefile CI
+ name: Makefile CI
 
 on:
+
   push:
+
     branches: [ "lineage-20.0" ]
+
   pull_request:
+
     branches: [ "lineage-20.0" ]
 
 jobs:
+
   build:
 
     runs-on: ubuntu-latest
 
     steps:
+
     - uses: actions/checkout@v3
 
-    - name: configure
-      run:  make mrproper
-            make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- exynos9820-beyond1lte_defconfig
+    #- name: configure
 
+    #  run: ./configure
 
     - name: Install dependencies
-      run: make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- 
+
+      run: |
+        make mrproper \
+        make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- exynos9820-beyond1lte_defconfig \
+        make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu-
+
+      
 
     - name: Run check
+
       run: make check
 
     - name: Run distcheck
+
       run: make distcheck
+
+    
