@@ -24,11 +24,13 @@ jobs:
 
     #  run: ./configure
 
-    - name: Install dependencies
-
+    - name: Configure
       run: |
         make mrproper \
         make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- exynos9820-beyond1lte_defconfig \
+        
+    - name: Configure
+      run: |
         make ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu-
 
       
